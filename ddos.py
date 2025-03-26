@@ -1,5 +1,10 @@
 import requests
 import threading
+import pyfiglet
+
+# Display "PARROT" in ASCII Art
+ascii_banner = pyfiglet.figlet_format("PARROT")
+print(ascii_banner)
 
 # Get user input for the target IP
 target_ip = input("Enter Target IP: ")
